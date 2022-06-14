@@ -55,6 +55,115 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Buttons", wxPoint(200, 20
 
 void MainWindow::OnBtnClick(wxCommandEvent& evt) {
 	int id = evt.GetId();
-	evt.GetEventObject();
-	but1->GetLabel();
+	//wxObject* obj = evt.GetEventObject();
+	switch (id) {
+	case 100: {
+		textBox->AppendText("mod");
+		break;
+	}
+	case 101: {
+		textBox->AppendText("bin");
+		break;
+	}
+	case 102: {
+		textBox->AppendText("hex");
+		break;
+	}
+	case 103: {
+		textBox->AppendText("dec");
+		break;
+
+	}
+	case 104: {
+		textBox->AppendText("7");
+		break;
+
+	}
+	case 105: {
+		textBox->AppendText("8");
+		break;
+
+	}
+	case 106: {
+		textBox->AppendText("9");
+		break;
+
+	}
+	case 107: {
+		textBox->AppendText("*");
+		break;
+
+	}
+	case 108: {
+		textBox->AppendText("4");
+		break;
+
+	}
+	case 109: {
+		textBox->AppendText("5");
+		break;
+
+	}
+	case 110: {
+		textBox->AppendText("6");
+		break;
+
+	}
+	case 111: {
+		textBox->AppendText("/");
+		break;
+
+	}
+	case 112: {
+		textBox->AppendText("1");
+		break;
+
+	}
+	case 113: {
+		textBox->AppendText("2");
+		break;
+
+	}
+	case 114: {
+		textBox->AppendText("3");
+		break;
+
+	}
+	case 115: {
+		textBox->AppendText("-");
+		break;
+
+	}
+	case 116: {
+		textBox->AppendText(".");
+		break;
+
+	}
+	case 117: {
+		textBox->AppendText("0");
+		break;
+
+	}
+	case 118: {
+		textBox->Clear();
+		break;
+
+	}
+	case 119: {
+		textBox->AppendText("+");
+		break;
+
+	}
+	case 120: {
+		textBox->AppendText("-");
+		break;
+
+	}
+	case 121: {
+		textBox->AppendText("=");
+		break;
+
+	}
+
+	}
 }
