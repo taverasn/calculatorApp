@@ -1,12 +1,12 @@
 #include "MainWindow.h"
 #include "ButtonFactory.h"
+#include "CalculatorProcessor.h"
 
 wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 wxEND_EVENT_TABLE()
 
 
 MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Buttons", wxPoint(200, 200), wxSize(300, 500)) {
-	
 	ButtonFactory btnFactory;
 	
 
@@ -43,6 +43,7 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Buttons", wxPoint(200, 20
 	btn8->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainWindow::OnBtnClick, this);
 	btn9->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainWindow::OnBtnClick, this);
 	btn10->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainWindow::OnBtnClick, this);
+	btn11->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainWindow::OnBtnClick, this);
 	btn12->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainWindow::OnBtnClick, this);
 	btn13->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainWindow::OnBtnClick, this);
 	btn14->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainWindow::OnBtnClick, this);
@@ -60,115 +61,132 @@ MainWindow::MainWindow() : wxFrame(nullptr, wxID_ANY, "Buttons", wxPoint(200, 20
 
 void MainWindow::OnBtnClick(wxCommandEvent& evt) {
 	int id = evt.GetId();
-	//wxObject* obj = evt.GetEventObject();
-	switch (id) {
-	case 100: {
-		textBox->AppendText("mod");
-		break;
-	}
-	case 101: {
-		textBox->AppendText("bin");
-		break;
-	}
-	case 102: {
-		textBox->AppendText("hex");
-		break;
-	}
-	case 103: {
-		textBox->AppendText("dec");
-		break;
+	CalculatorProcessor* calcProcessor = CalculatorProcessor::GetInstance();
 
-	}
-	case 104: {
-		textBox->AppendText("7");
-		break;
+	
+	wxObject* obj = evt.GetEventObject();
+	wxButton* currButton = (wxButton*)obj;
 
+	if (id == 100) {
+		textBox->AppendText("%");
 	}
-	case 105: {
-		textBox->AppendText("8");
-		break;
-
-	}
-	case 106: {
-		textBox->AppendText("9");
-		break;
-
-	}
-	case 107: {
-		textBox->AppendText("*");
-		break;
-
-	}
-	case 108: {
-		textBox->AppendText("4");
-		break;
-
-	}
-	case 109: {
-		textBox->AppendText("5");
-		break;
-
-	}
-	case 110: {
-		textBox->AppendText("6");
-		break;
-
-	}
-	case 111: {
-		textBox->AppendText("/");
-		break;
-
-	}
-	case 112: {
-		textBox->AppendText("1");
-		break;
-
-	}
-	case 113: {
-		textBox->AppendText("2");
-		break;
-
-	}
-	case 114: {
-		textBox->AppendText("3");
-		break;
-
-	}
-	case 115: {
-		textBox->AppendText("-");
-		break;
-
-	}
-	case 116: {
-		textBox->AppendText(".");
-		break;
-
-	}
-	case 117: {
-		textBox->AppendText("0");
-		break;
-
-	}
-	case 118: {
+	else if (id == 101) {
+		calcProcessor->SetBaseNumber(stoi(textBox->GetValue().ToStdString()));
 		textBox->Clear();
-		break;
-
+		textBox->AppendText(calcProcessor->GetBinary());
+	}	
+	else if (id == 102) {
+		calcProcessor->SetBaseNumber(stoi(textBox->GetValue().ToStdString()));
+		textBox->Clear();
+		textBox->AppendText(calcProcessor->GetHexadecimal());
+	}	
+	else if (id == 103) {
+		calcProcessor->SetBaseNumber(stoi(textBox->GetValue().ToStdString()));
+		textBox->Clear();
+		textBox->AppendText(calcProcessor->GetDecimal());
 	}
-	case 119: {
-		textBox->AppendText("+");
-		break;
-
+	else if (id == 118) {
+		textBox->Clear();
 	}
-	case 120: {
-		textBox->AppendText("-");
-		break;
-
+	else if (id == 120) {
+		std::string val = textBox->GetValue().ToStdString();
+		textBox->Clear();
+		textBox->AppendText("-" + val);
 	}
-	case 121: {
-		textBox->AppendText("=");
-		break;
-
+	else if (id == 121) {
+		std::string val = textBox->GetValue().ToStdString();
+		std::string firstNum = "";
+		std::string secondNum = "";
+		std::string tempVal = val;
+		std::string op = "";
+		for (int i = val.length() - 1; i >= 0; i--) {
+			if (val[i] == (std::string)"*")
+			{
+				op = "*";
+				tempVal.pop_back();
+				firstNum = tempVal;
+				i = 0;
+			}
+			else if (val[i] == (std::string)"/")
+			{
+				op = "/";
+				tempVal.pop_back();
+				firstNum = tempVal;
+				i = 0;
+			}			
+			else if (val[i] == (std::string)"-")
+			{
+				op = "-";
+				tempVal.pop_back();
+				firstNum = tempVal;
+				i = 0;
+			}			
+			else if (val[i] == (std::string)"+") 
+			{
+				op = "+";
+				tempVal.pop_back();
+				firstNum = tempVal;
+				i = 0;
+			}
+			else if (val[i] == (std::string)"%") 
+			{
+				op = "%";
+				tempVal.pop_back();
+				firstNum = tempVal;
+				i = 0;
+			}
+			else 
+			{
+				secondNum = val[i] + secondNum;
+				tempVal.pop_back();
+			}
+		}
+		if (op == "*") {
+			textBox->Clear();
+			int result = calcProcessor->Multiply(stoi(firstNum), stoi(secondNum));
+			wxString string;
+			string << result;
+			textBox->AppendText(string);
+		}
+		else if (op == "/")
+		{
+			textBox->Clear();
+			int result = calcProcessor->Divide(stoi(firstNum), stoi(secondNum));
+			wxString string;
+			string << result;
+			textBox->AppendText(string);
+		}
+		else if (op == "-")
+		{
+			textBox->Clear();
+			int result = calcProcessor->Subtract(stoi(firstNum), stoi(secondNum));
+			wxString string;
+			string << result;
+			textBox->AppendText(string);
+		}
+		else if (op == "+")
+		{
+			textBox->Clear();
+			int result = calcProcessor->Add(stoi(firstNum), stoi(secondNum));
+			wxString string;
+			string << result;
+			textBox->AppendText(string);
+		}
+		else if (op == "%")
+		{
+			textBox->Clear();
+			int result = calcProcessor->Mod(stoi(firstNum), stoi(secondNum));
+			wxString string;
+			string << result;
+			textBox->AppendText(string);
+		}
+		else
+		{
+			return;
+		}
 	}
-
+	else {
+		std::string butLabel = currButton->GetLabel().ToStdString();
+		textBox->AppendText(butLabel);
 	}
 }
