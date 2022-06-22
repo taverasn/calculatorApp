@@ -141,47 +141,15 @@ void MainWindow::OnBtnClick(wxCommandEvent& evt) {
 				tempVal.pop_back();
 			}
 		}
-		if (op == "*") {
+		if (op == "*" || op == "/" || op == "-" || op == "+" || op == "%")
+		{
 			textBox->Clear();
-			int result = calcProcessor->Multiply(stoi(firstNum), stoi(secondNum));
+			int result = calcProcessor->RunOperation(stoi(firstNum), stoi(secondNum), op);
 			wxString string;
 			string << result;
 			textBox->AppendText(string);
 		}
-		else if (op == "/")
-		{
-			textBox->Clear();
-			int result = calcProcessor->Divide(stoi(firstNum), stoi(secondNum));
-			wxString string;
-			string << result;
-			textBox->AppendText(string);
-		}
-		else if (op == "-")
-		{
-			textBox->Clear();
-			int result = calcProcessor->Subtract(stoi(firstNum), stoi(secondNum));
-			wxString string;
-			string << result;
-			textBox->AppendText(string);
-		}
-		else if (op == "+")
-		{
-			textBox->Clear();
-			int result = calcProcessor->Add(stoi(firstNum), stoi(secondNum));
-			wxString string;
-			string << result;
-			textBox->AppendText(string);
-		}
-		else if (op == "%")
-		{
-			textBox->Clear();
-			int result = calcProcessor->Mod(stoi(firstNum), stoi(secondNum));
-			wxString string;
-			string << result;
-			textBox->AppendText(string);
-		}
-		else
-		{
+		else {
 			return;
 		}
 	}

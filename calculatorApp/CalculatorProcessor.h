@@ -1,12 +1,27 @@
 #pragma once
 #include <string>
+#include <vector>
+#include "IBaseCommand.h"
+#include "AddCommand.h"
+#include "SubtractCommand.h"
+#include "MultiplyCommand.h"
+#include "DivideCommand.h"
+#include "ModCommand.h"
+
 class CalculatorProcessor
 {
 private:
 	static CalculatorProcessor* _calculatorProcessor;
 	int baseNumber;
 	CalculatorProcessor() {}
+	AddCommand addCommand;
+	SubtractCommand subtractCommand;
+	MultiplyCommand multiplyCommand;
+	DivideCommand divideCommand;
+	ModCommand modCommand;
+	std::vector<IBaseCommand*> calcCommands = {&addCommand, &subtractCommand, &multiplyCommand, &divideCommand, &modCommand};
 public:
+
 	static CalculatorProcessor* GetInstance() {
 		if (_calculatorProcessor == nullptr) {
 			_calculatorProcessor = new CalculatorProcessor();
@@ -76,23 +91,24 @@ public:
 		return results;
 	}
 
-	int Multiply(int num1, int num2) {
-		return num1 * num2;
-	}
-	
-	int Add(int num1, int num2) {
-		return num1 + num2;
-	}
-	
-	int Divide(int num1, int num2) {
-		return num1 / num2;
-	}
-	
-	int Subtract(int num1, int num2) {
-		return num1 - num2;
-	}
-	int Mod(int num1, int num2) {
-		return num1 % num2;
+	int RunOperation(int num1, int num2, std::string operation) {
+		int result = 0;
+		if (operation == "*") {
+			result = calcCommands[2]->execute(num1, num2);
+		}
+		else if (operation == "/") {
+			result = calcCommands[3]->execute(num1, num2);
+		}
+		else if (operation == "-") {
+			result = calcCommands[1]->execute(num1, num2);
+		}
+		else if (operation == "+") {
+			result = calcCommands[0]->execute(num1, num2);
+		}
+		else if (operation == "%") {
+			result = calcCommands[4]->execute(num1, num2);
+		}
+		return result;
 	}
 
 };
